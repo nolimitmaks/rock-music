@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
-import { of } from 'rxjs/observable/of';
+import { of } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 
-import { Band } from './model';
+import {Band} from '../models/model'
 
 
 
@@ -51,7 +51,7 @@ export class MusicInfoService {
         .filter(band => active === undefined ? true : band.isActive === active)
     ]).pipe(
       tap(() => console.log('Fetching data started')),
-      delay(1000),
+      delay(5 * 1000),
       // map(() => { throw "aaaa"; }), // uncomment for errors
       tap(() => console.log('Fetching data finished')),
     );
@@ -60,11 +60,13 @@ export class MusicInfoService {
   updateIsActive(id: string, isActive: boolean) {
     console.log(`Setting isActive to ${isActive} for band with id ${id}`);
     const band = this.bands.find(band => band.id === id);
-    band.isActive = isActive;
+    if(band) {
+      band.isActive = isActive;
+    }
     return of({ ...band }).pipe(
       delay(1000)
     );
   }
 
-  
+
 }
