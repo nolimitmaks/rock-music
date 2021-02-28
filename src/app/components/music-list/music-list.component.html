@@ -10,9 +10,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let band of bandList">
-                <td>{{ band.name }}</td>
-                <td>{{ band.formationYear }}</td>
-                <td>{{ band.isActive }}</td>
+                <td>{{ band?.name }}</td>
+                <td>{{ band?.formationYear }}</td>
+                <td>{{ band?.isActive }}</td>
             </tr>
         </tbody>
     </table>
