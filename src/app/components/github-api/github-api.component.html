@@ -1,0 +1,49 @@
+<div>
+    <input (input)='inputSearch($event)' type="text" id="s1" placeholder="find github users">
+    <label for="s1">serch github users</label>
+</div>
+
+<div class="row" id="result" *ngFor="let repo of repos; index as i">
+
+    
+
+    <div class="card" style="width: 18rem;">
+        <!-- <img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+
+            
+
+
+            <button type="button" class="btn btn-primary btn-sm">
+                {{repo?.full_name}} <span class="badge bg-secondary">{{i}}</span>
+            </button>
+
+
+            <span class="badge bg-primary">{{repo?.name}}</span>
+            <span class="badge bg-secondary">{{repo?.node_id}}</span>
+
+<!-- 
+            
+            <span class="badge bg-success">Success</span>
+            <span class="badge bg-danger">Danger</span>
+            <span class="badge bg-warning text-dark">Warning</span>
+            <span class="badge bg-info text-dark">Info</span>
+            <span class="badge bg-light text-dark">Light</span>
+            <span class="badge bg-dark">Dark</span> -->
+
+            <!-- <span class="badge bg-primary">Primary</span>
+            <span class="badge bg-secondary">Secondary</span>
+            <span class="badge bg-success">Success</span>
+            <span class="badge bg-danger">Danger</span>
+            <span class="badge bg-warning text-dark">Warning</span>
+            <span class="badge bg-info text-dark">Info</span>
+            <span class="badge bg-light text-dark">Light</span>
+            <span class="badge bg-dark">Dark</span> -->
+        </div>
+    </div>
+</div>
+
+
