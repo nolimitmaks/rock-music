@@ -1,33 +1,66 @@
 <h2>Bands</h2>
-<div class="row" *ngIf="bandList$ | async as bandList else loading">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Formation year</th>
-                <th>Is active</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let band of bandList">
-                <td>{{ band?.name }}</td>
-                <td>{{ band?.formationYear }}</td>
-                <td>{{ band?.isActive }}</td>
-            </tr>
-        </tbody>
-    </table>
+<!-- <div class="row" *ngIf="bandList$ | async as bandList else loading"> -->
+<div class="row" *ngIf="model$ | async as model">
+    
+
+    <div class="col-sm-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Formation year</th>
+                    <th>Is active</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="model.isLoading">
+                    <td colspan="3">Loading...
+
+                        <div style="display: flex;justify-content: center;align-items: center;">
+                            <mat-progress-spinner
+                                class="example-margin"
+                                [color]="color"
+                                [mode]="mode"
+                                [value]="value">
+                            </mat-progress-spinner>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngFor="let band of model.bands">
+                    <td>{{ band?.name }}</td>
+                    <td>{{ band?.formationYear }}</td>
+                    <td>{{ band?.isActive }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="col-sm-6">
+        <button 
+            [disabled]="model.isLoading"
+            class="btn btn-primary" 
+            type="button" 
+            (click)="refreshDataClickSubject.next()">Refresh data</button>
+    </div>
+
+    
+
+
+    
 </div>
 
-<ng-template #loading>
+<!-- <ng-template #loading>
     <div>
         loading please wait...
     </div>
-</ng-template>
+</ng-template> -->
 
-<pre *ngIf="bandList$ | async as arr else loadingArray">{{ arr | json }}</pre>
+<!-- <pre *ngIf="bandList$ | async as arr else loadingArray">{{ arr | json }}</pre> -->
 
-<ng-template #loadingArray>
+<!-- <ng-template #loadingArray>
     <div>
         loadingArray...
     </div>
-</ng-template>
+</ng-template> -->

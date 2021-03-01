@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { interval, Observable, Subscription, VirtualTimeScheduler } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { interval, merge, Observable, Subject, Subscription, VirtualTimeScheduler } from 'rxjs';
+import { filter, map, mergeMap, repeat, startWith } from 'rxjs/operators';
 
 import { MusicInfoService } from 'src/app/services/music-info.service';
 
 import {Band} from '../../models/model'
 
 
+import {ThemePalette} from '@angular/material/core';
+import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-music-list',
@@ -15,14 +17,22 @@ import {Band} from '../../models/model'
 })
 export class MusicListComponent implements OnInit {
 
+  refreshDataClickSubject = new Subject<{}>()
+
   // bandList: Band[] = []
   // bandListSub$:  Subscription;
   // obs_int$: Subscription;
 
 
-  bandList$: Observable<Band[]>
+  // spinner
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
+  value = 50;
 
-  // case 2
+
+
+
+  model$: Observable<{bands: Band[], isLoading: boolean}>
 
   constructor(private _musicInfoService: MusicInfoService) {
     //  const obs_int = interval(1000).pipe(
@@ -44,10 +54,55 @@ export class MusicListComponent implements OnInit {
 
     // case 2
 
-    this.bandList$ = this._musicInfoService.getBands()
+    // this.bandList$ = this._musicInfoService.getBands()
+
+
+    
 
 
 
+    // case 3 with Subject
+
+    const refreshDataClick$ = this.refreshDataClickSubject.asObservable()
+
+    const refreshTriger$ = refreshDataClick$.pipe(
+      startWith({})
+    )
+
+    const bandList$ = refreshTriger$.pipe(
+      mergeMap(
+        () => this._musicInfoService.getBands()
+      )
+    )
+
+    this.model$ = merge(
+      refreshTriger$.pipe(
+        map(
+          () => ({bands: [], isLoading: true})
+        )
+      ),
+      bandList$.pipe(
+        map(
+          bands => ({bands: bands, isLoading: false})
+        )
+      )
+
+    )
+    
+
+
+    // refreshTriger$.subscribe(
+    //   v => console.log(v)
+    // )
+
+    // bandList$.subscribe(
+    //   data => console.log(data)    
+    // )
+
+    this.model$.subscribe(
+      data => console.log(data)
+      
+    )
 
   }
 
@@ -66,5 +121,7 @@ export class MusicListComponent implements OnInit {
     // this.obs_int$.unsubscribe()
     
   }
+
+
 
 }
