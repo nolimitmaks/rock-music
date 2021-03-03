@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { interval, merge, Observable, Subject, Subscription, VirtualTimeScheduler } from 'rxjs';
-import { filter, map, mergeMap, repeat, startWith } from 'rxjs/operators';
+import { combineLatest, filter, map, mergeMap, repeat, startWith } from 'rxjs/operators';
+
+import { ActivatedRoute } from '@angular/router';
 
 import { MusicInfoService } from 'src/app/services/music-info.service';
 
@@ -9,6 +11,7 @@ import {Band} from '../../models/model'
 
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-music-list',
@@ -31,10 +34,12 @@ export class MusicListComponent implements OnInit {
 
 
 
-
   model$: Observable<{bands: Band[], isLoading: boolean}>
 
-  constructor(private _musicInfoService: MusicInfoService) {
+  constructor(
+    private _musicInfoService: MusicInfoService,
+    private _activatedRoute: ActivatedRoute
+    ) {
     //  const obs_int = interval(1000).pipe(
     //    map(value => value * value),
     //    filter(value => value % 2 === 0)
@@ -49,7 +54,7 @@ export class MusicListComponent implements OnInit {
     //   bands  => this.bandList = bands
     // )
 
-
+      
 
 
     // case 2
@@ -66,12 +71,18 @@ export class MusicListComponent implements OnInit {
     const refreshDataClick$ = this.refreshDataClickSubject.asObservable()
 
     const refreshTriger$ = refreshDataClick$.pipe(
-      startWith({})
+      startWith({}),
+      combineLatest(_activatedRoute.queryParams),
+      map(([_, params]) => {
+        return params.active === undefined 
+        ? 
+        undefined : params.active === 'true'
+      })
     )
 
     const bandList$ = refreshTriger$.pipe(
       mergeMap(
-        () => this._musicInfoService.getBands()
+        (active) => this._musicInfoService.getBands(active)
       )
     )
 
@@ -113,6 +124,11 @@ export class MusicListComponent implements OnInit {
     //     this.obs_int$.unsubscribe()
     //   }, 10 * 1000
     // )
+
+    this._activatedRoute.queryParams.subscribe(
+      data => console.log(data)
+      
+    )
     
   }
 

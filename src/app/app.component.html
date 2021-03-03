@@ -1,6 +1,16 @@
 <div class="container">
   <p class="lead">reactive programming in Angular.</p>
-  <app-music-list></app-music-list>
+  <!-- <app-music-list></app-music-list> -->
+  <div>
+    <nav>
+      <ul>
+        <li routerLink="music-list" [queryParams]="{active: true}">active</li>
+        <li routerLink="music-list" [queryParams]="{active: false}">inactive</li>
+        <li routerLink="music-list">All</li>
+      </ul>
+    </nav>
+  </div>
+  <router-outlet></router-outlet>
 </div>
 
 

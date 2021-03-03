@@ -35,6 +35,16 @@ export class MusicInfoService {
       formationYear: 1984,
       isActive: false
     },
+
+    { 
+      id: 'a2a6c014-35e7-478f-b4a1-fc83dcfe811x', 
+      name: 'Scorpions', 
+      bio: 'just cool',
+      formationYear: 1984,
+      isActive: true
+    },
+
+
   ];
 
 
@@ -51,7 +61,7 @@ export class MusicInfoService {
         .filter(band => active === undefined ? true : band.isActive === active)
     ]).pipe(
       tap(() => console.log('Fetching data started')),
-      delay(5 * 1000),
+      delay(5 *1000),
       // map(() => { throw "aaaa"; }), // uncomment for errors
       tap(() => console.log('Fetching data finished')),
     );
