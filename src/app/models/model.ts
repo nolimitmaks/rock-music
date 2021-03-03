@@ -6,6 +6,7 @@ export interface Band {
     bio: string;
     formationYear: number;
     isActive: boolean;
+    favorite?: boolean;
 }
 
 export interface User {

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { interval, merge, Observable, Subject, Subscription, VirtualTimeScheduler } from 'rxjs';
+import { forkJoin, interval, merge, Observable, of, Subject, Subscription, VirtualTimeScheduler } from 'rxjs';
 import { combineLatest, filter, map, mergeMap, repeat, startWith } from 'rxjs/operators';
 
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,7 @@ import {Band} from '../../models/model'
 
 import {ThemePalette} from '@angular/material/core';
 import {ProgressSpinnerMode} from '@angular/material/progress-spinner';
+import { UserDataService } from 'src/app/services/user-data.service';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class MusicListComponent implements OnInit {
 
   constructor(
     private _musicInfoService: MusicInfoService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    private _userDataService: UserDataService
     ) {
     //  const obs_int = interval(1000).pipe(
     //    map(value => value * value),
@@ -82,9 +84,19 @@ export class MusicListComponent implements OnInit {
 
     const bandList$ = refreshTriger$.pipe(
       mergeMap(
-        (active) => this._musicInfoService.getBands(active)
+        (active) => forkJoin(
+          this._musicInfoService.getBands(active),
+          this._userDataService.currentUser
+          ).pipe(
+            map(
+              ([bands, currentUser]) => bands.map(
+                band => band.id === currentUser.favoriteBandId ? {...band, favorite: true} : band
+              )
+            )
+          )
+        )
       )
-    )
+    
 
     this.model$ = merge(
       refreshTriger$.pipe(
@@ -106,9 +118,9 @@ export class MusicListComponent implements OnInit {
     //   v => console.log(v)
     // )
 
-    // bandList$.subscribe(
-    //   data => console.log(data)    
-    // )
+    bandList$.subscribe(
+      data => console.log(data)    
+    )
 
     this.model$.subscribe(
       data => console.log(data)

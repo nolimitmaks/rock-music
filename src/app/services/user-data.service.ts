@@ -11,7 +11,7 @@ export class UserDataService {
   constructor() { }
 
   
-  getCurrentUser(): Observable<User> {
+  get currentUser(): Observable<User> {
 
     return of(
       {
@@ -21,8 +21,9 @@ export class UserDataService {
       }
     ).pipe(
       tap(() => console.log('start fetching user data')),
-      delay(1000),
+      delay(10000),
       tap(() => console.log('finished fetching user data'))
     )
   }
+
 }
