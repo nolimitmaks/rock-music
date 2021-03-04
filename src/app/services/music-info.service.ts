@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { interval, Observable, of } from 'rxjs';
+import { delay, map, tap } from 'rxjs/operators';
 
 import {Band} from '../models/model'
 
@@ -78,5 +78,27 @@ export class MusicInfoService {
     );
   }
 
+  searchBands(queryString: string) {
+    return of(
+      this.bands.filter(
+        b => queryString && queryString.length > 0 ?
+        b.name.toLowerCase().includes(queryString.toLowerCase()) :
+        false
+      )
+    ).pipe(
+      tap(() => console.log('Fetching data started')),
+      delay(5 *1000),
+      // map(() => { throw "aaaa"; }), // uncomment for errors
+      tap(() => console.log('Fetching data finished')),
+    )
+  }
+
+  getUpdates(): Observable<Band> {
+    return interval(500).pipe(
+      map(() => this.bands[Math.floor(Math.random()*this.bands.length)]),
+      tap(band => console.log(`Receive bands name${band.name}`)
+      )
+    )
+  }
 
 }

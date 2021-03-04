@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MusicSearchComponent } from './components/music-search/music-search.component';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 
 
@@ -19,17 +21,19 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     AppComponent,
     MusicComponent,
     MusicListComponent,
-    GithubApiComponent
+    GithubApiComponent,
+    MusicSearchComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
 
 
     MatProgressSpinnerModule
   ],
-  providers: [],
+  providers: [ToastrService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
