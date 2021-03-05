@@ -14,6 +14,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MusicSearchComponent } from './components/music-search/music-search.component';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { MusicCreateComponent } from './components/music-create/music-create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -30,10 +31,9 @@ import { MusicCreateComponent } from './components/music-create/music-create.com
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    MatProgressSpinnerModule,
     ToastrModule.forRoot(),
-
-
-    MatProgressSpinnerModule
   ],
   providers: [ToastrService],
   bootstrap: [AppComponent]

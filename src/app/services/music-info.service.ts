@@ -94,7 +94,7 @@ export class MusicInfoService {
   }
 
   getUpdates(): Observable<Band> {
-    return interval(500).pipe(
+    return interval(50000).pipe(
       map(() => this.bands[Math.floor(Math.random()*this.bands.length)]),
       tap(band => console.log(`Receive bands name${band.name}`)
       )
